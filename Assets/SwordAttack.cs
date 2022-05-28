@@ -16,6 +16,7 @@ public class SwordAttack : MonoBehaviour
     public void AttackLeft()
     {
         print("Attack Left!");
+        transform.localPosition = -rightAttackOffset;
         swordCollider.enabled = true;
         //swordCollider.enabled = false;   Try and flicker the collider enabled and disabled in the animation
         //swordCollider.enabled = true;
@@ -26,6 +27,7 @@ public class SwordAttack : MonoBehaviour
     public void AttackRight()
     {
         print("Attack Right!");
+        transform.localPosition = -rightAttackOffset;
         swordCollider.enabled = true;
         transform.localPosition = rightAttackOffset; // Local position is used to make it relative to the Parent Object
     }

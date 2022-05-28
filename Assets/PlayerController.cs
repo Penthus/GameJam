@@ -108,8 +108,8 @@ public class PlayerController : MonoBehaviour
     public void SwordAttack()
     {
         LockMovement();
-        
-        if (transform.localScale==new Vector3(-1,1,1))
+
+        if (transform.localScale == new Vector3(-1, 1, 1))
         {
             swordAttack.AttackLeft();
         }
