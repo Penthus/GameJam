@@ -7,6 +7,7 @@ public class SwordAttack : MonoBehaviour
     [SerializeField] private Vector2 rightAttackOffset;
     [SerializeField] private Collider2D swordCollider;
     [SerializeField] private float damage = 3f;
+    [SerializeField] private AudioSource[] swings;
 
     private void Start()
     {
@@ -54,22 +55,8 @@ public class SwordAttack : MonoBehaviour
         }
     }
 
-    //private void OnTriggerStay2D(Collider2D other)
-    //{
-    //    //Seems to damage every frame so would need a CD?
-    //    if (other.enabled)
-    //    {
-    //        print(other);
-    //        if (other.tag == "Enemy")
-    //        {
-    //            // Deal damage to enemy
-    //            Enemy enemy = other.GetComponent<Enemy>();
-    //            print(enemy);
-    //            if (enemy != null)
-    //            {
-    //                enemy.Health -= damage;
-    //            }
-    //        }
-    //    }
-    //}
+    public void PlaySwordSFX()
+    {
+        swings[Random.Range(0, swings.Length)].Play();
+    }
 }

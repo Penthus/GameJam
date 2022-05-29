@@ -132,6 +132,7 @@ public class PlayerController : MonoBehaviour
         if (canAttack)
         {
             animator.SetTrigger("swordAttack");
+            swordAttack.PlaySwordSFX();
         }
     }
 

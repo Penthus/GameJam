@@ -1,1 +1,9 @@
-Art Sprite Sheets - https://opengameart.org/content/dungeon-crawl-32x32-tiles-supplemental
+Art Sprite Sheets 
+DungeonTileSetII - https://0x72.itch.io/dungeontileset-ii - CC0 - edits made to sprites and animations.
+
+Music
+Heroic Demise by Matthew Pablo - https://opengameart.org/content/heroic-demise-updated-version - https://creativecommons.org/licenses/by/3.0/
+
+SFX
+RPG Sound Pack - https://opengameart.org/content/rpg-sound-pack - CC0
+
