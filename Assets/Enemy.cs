@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private float _maxHealth = 5f;
-    private float _healthBarDecayTime=0.015f;
+    [SerializeField] private float _damage = 1f;
+
     private float _health;
     private float _distance = 0.6f;
     private float _moveSpeed = 0.2f;
@@ -19,7 +20,9 @@ public class Enemy : MonoBehaviour
 
     public Image hpImage;
     public Image hpEffectImage;
-    
+    private float _healthBarDecayTime = 0.015f;
+    private bool isAlive = true;
+
 
     public float Health
     {
@@ -30,6 +33,7 @@ public class Enemy : MonoBehaviour
             if (_health <= 0)
             {
                 Defeated();
+                isAlive = false;
             }
         }
     }
@@ -51,17 +55,20 @@ public class Enemy : MonoBehaviour
 
     private void Move()
     {
-        if (Vector2.Distance(transform.position, target.position) < _distance || _chaseRemain > 0f)
+        if (isAlive)
         {
-            if (Vector2.Distance(transform.position, target.position) < _distance)
+            if (Vector2.Distance(transform.position, target.position) < _distance || _chaseRemain > 0f)
             {
-                _chaseRemain = _chaseTimer;
+                if (Vector2.Distance(transform.position, target.position) < _distance)
+                {
+                    _chaseRemain = _chaseTimer;
+                }
+                else
+                {
+                    _chaseRemain=_chaseRemain-Time.deltaTime;
+                }
+                transform.position = Vector2.MoveTowards(transform.position, target.position, _moveSpeed * Time.deltaTime);
             }
-            else
-            {
-                _chaseRemain=_chaseRemain-Time.deltaTime;
-            }
-            transform.position = Vector2.MoveTowards(transform.position, target.position, _moveSpeed * Time.deltaTime);
         }
     }
 
@@ -98,6 +105,21 @@ public class Enemy : MonoBehaviour
         else
         {
             hpEffectImage.fillAmount = hpImage.fillAmount;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Player")
+        {
+            // Deal damage to enemy
+            PlayerController player = other.GetComponent<PlayerController>();
+            print(player);
+            if (player != null)
+            {
+                player.Health -= _damage;
+                // enemy.DisplayHpBar();
+            }
         }
     }
 }

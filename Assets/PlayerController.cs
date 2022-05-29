@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -19,6 +20,28 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float collisionOffset = 0.05f; // extra distance to check for objects to ensure you don't get stuck in a wall etc.
     [SerializeField] private ContactFilter2D movementFilter;
     [SerializeField] private List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
+    [SerializeField] private float maxHealth;
+    [SerializeField] private Canvas canvas;
+    public float health;
+
+    public Image hpImage;
+    public Image hpEffectImage;
+    private float _healthBarDecayTime = 0.015f;
+    private bool canAttack=true;
+
+    public float Health
+    {
+        get { return health; }
+        set
+        {
+            health = value;
+            if (health <= 0)
+            {
+                Defeated();
+            }
+        }
+    }
+
 
     // Start is called before the first frame update
     void Start()
@@ -26,11 +49,13 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        health = maxHealth;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        DisplayHpBar();
         if (canMove)
         {
             // If movement input is not 0, try to move
@@ -57,11 +82,13 @@ public class PlayerController : MonoBehaviour
             if (movementInput.x < 0)
             {
                 transform.localScale = new Vector3(-1, 1, 1);
+                canvas.transform.localScale = new Vector3(-2, 1, 1);
                 //spriteRenderer.flipX = true;
             }
             else if (movementInput.x > 0)
             {
                 transform.localScale = new Vector3(1, 1, 1);
+                canvas.transform.localScale = new Vector3(2, 1, 1);
                 //spriteRenderer.flipX = false;
             }
         }
@@ -101,8 +128,11 @@ public class PlayerController : MonoBehaviour
 
     void OnFire()
     {
-        print("Fire Pressed!");
-        animator.SetTrigger("swordAttack");
+
+        if (canAttack)
+        {
+            animator.SetTrigger("swordAttack");
+        }
     }
 
     public void SwordAttack()
@@ -133,5 +163,25 @@ public class PlayerController : MonoBehaviour
     public void UnlockMovement()
     {
         canMove = true;
+    }
+
+    public void Defeated()
+    {
+        LockMovement();
+        canAttack = false;
+    }
+
+    public void DisplayHpBar()
+    {
+        hpImage.fillAmount = health / maxHealth;
+
+        if (hpEffectImage.fillAmount > hpImage.fillAmount)
+        {
+            hpEffectImage.fillAmount -= _healthBarDecayTime;
+        }
+        else
+        {
+            hpEffectImage.fillAmount = hpImage.fillAmount;
+        }
     }
 }
