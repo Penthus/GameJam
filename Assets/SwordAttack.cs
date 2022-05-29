@@ -49,6 +49,7 @@ public class SwordAttack : MonoBehaviour
             if (enemy != null)
             {
                 enemy.Health -= damage;
+               // enemy.DisplayHpBar();
             }
         }
     }
