@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
@@ -15,6 +17,7 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private SpriteRenderer spriteRenderer;
     private SpriteRenderer swordSpriteRenderer;
+    private AudioSource audioSource;
 
     [SerializeField] private float moveSpeed = 1f;
     [SerializeField] private float collisionOffset = 0.05f; // extra distance to check for objects to ensure you don't get stuck in a wall etc.
@@ -29,6 +32,9 @@ public class PlayerController : MonoBehaviour
     private float _healthBarDecayTime = 0.015f;
     private bool canAttack=true;
 
+    public TextMeshProUGUI gameOver;
+    public TextMeshProUGUI thankYou;
+
     public float Health
     {
         get { return health; }
@@ -38,6 +44,8 @@ public class PlayerController : MonoBehaviour
             if (health <= 0)
             {
                 Defeated();
+                gameOver.enabled = true;
+                thankYou.enabled = true;
             }
         }
     }
@@ -49,12 +57,28 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
         health = maxHealth;
+        gameOver.enabled = false;
+        thankYou.enabled = false;
     }
 
+    void Update()
+    {
+        if (((KeyControl)Keyboard.current["q"]).wasPressedThisFrame)
+        {
+            CloseGame();
+            Debug.Log("Quit Game");
+        }
+        else if (((KeyControl)Keyboard.current["m"]).wasPressedThisFrame)
+        {
+            ToggleMusic();
+        }
+    }
     // Update is called once per frame
     void FixedUpdate()
     {
+       
         DisplayHpBar();
         if (canMove)
         {
@@ -184,5 +208,15 @@ public class PlayerController : MonoBehaviour
         {
             hpEffectImage.fillAmount = hpImage.fillAmount;
         }
+    }
+
+    public void ToggleMusic()
+    {
+        audioSource.mute = !audioSource.mute;
+    }
+
+    public void CloseGame()
+    {
+        Application.Quit();
     }
 }

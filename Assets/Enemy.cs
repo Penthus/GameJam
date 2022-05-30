@@ -29,6 +29,7 @@ public class Enemy : MonoBehaviour
     private GameObject patrolManager;
 
     public Transform[] m_PatrolPoints;
+    public Vector2 currentPatrolPoint;
 
     public float Health
     {
@@ -84,8 +85,24 @@ public class Enemy : MonoBehaviour
             }
             else
             {
-                //Find waypoint to move towards
-                transform.position = Vector2.MoveTowards(transform.position, m_PatrolPoints[Random.Range(0, m_PatrolPoints.Length)].position, _moveSpeed * Time.deltaTime);
+                if (currentPatrolPoint == Vector2.zero || currentPatrolPoint == new Vector2(transform.position.x,transform.position.y))
+                {
+                    //Find waypoint to move towards
+                    //ToDo this doesn't work and they are just running to 0,0
+                    Vector2 target = m_PatrolPoints[Random.Range(1, m_PatrolPoints.Length)].position;
+                    currentPatrolPoint = target;
+                    Debug.Log($"{this.name},{target}");
+                    transform.position = Vector2.MoveTowards(transform.position, target, _moveSpeed * Time.deltaTime);
+                }
+                else
+                {
+                    transform.position = Vector2.MoveTowards(transform.position, currentPatrolPoint, _moveSpeed * Time.deltaTime);
+                }
+
+                if (this.name == "Green Husk Minion")
+                {
+                    Debug.Log("Here");
+                }
             }
         }
     }
