@@ -23,6 +23,12 @@ public class Enemy : MonoBehaviour
     private float _healthBarDecayTime = 0.015f;
     private bool isAlive = true;
 
+    public delegate void EnemyKilled();
+    public static event EnemyKilled OnEnemyKilled;
+
+    private GameObject patrolManager;
+
+    public Transform[] m_PatrolPoints;
 
     public float Health
     {
@@ -34,6 +40,10 @@ public class Enemy : MonoBehaviour
             {
                 Defeated();
                 isAlive = false;
+                if (OnEnemyKilled!=null)
+                {
+                    OnEnemyKilled();
+                }
             }
         }
     }
@@ -43,6 +53,8 @@ public class Enemy : MonoBehaviour
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        patrolManager = GameObject.FindGameObjectWithTag("Patrol");
+        m_PatrolPoints = patrolManager.GetComponentsInChildren<Transform>();
         _health = _maxHealth;
     }
 
@@ -68,6 +80,12 @@ public class Enemy : MonoBehaviour
                     _chaseRemain=_chaseRemain-Time.deltaTime;
                 }
                 transform.position = Vector2.MoveTowards(transform.position, target.position, _moveSpeed * Time.deltaTime);
+                
+            }
+            else
+            {
+                //Find waypoint to move towards
+                transform.position = Vector2.MoveTowards(transform.position, m_PatrolPoints[Random.Range(0, m_PatrolPoints.Length)].position, _moveSpeed * Time.deltaTime);
             }
         }
     }

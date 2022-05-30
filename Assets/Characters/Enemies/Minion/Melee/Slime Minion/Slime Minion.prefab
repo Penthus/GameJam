@@ -149,9 +149,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 5
-  _healthBarDecayTime: 0.01
-  hpImage: {fileID: 0}
-  hpEffectImage: {fileID: 0}
+  _damage: 1
+  hpImage: {fileID: 7379063202050544473}
+  hpEffectImage: {fileID: 1718475777012296460}
 --- !u!95 &-2847661390929720857
 Animator:
   serializedVersion: 4
